@@ -69,5 +69,62 @@ def get_network_info():
    
     except:
       return {'ip_address': '127.0.0.1' }
+
+def get_top_processes():
+    #Retrieve all information about the processes
+    processes = []
     
+    # Collection of all processes with their information
+    for proc in psutil.process_iter(['pid', 'name', 'cpu_percent', 'memory_percent']):
+        try:
+            processes.append(proc.info)
+        except (psutil.NoSuchProcess, psutil.AccessDenied):
+            pass
+    
+    # Full list of processes with CPU consumption
+    processes_cpu = []
+    for proc in processes:
+        if proc['cpu_percent'] > 0:
+            processes_cpu.append({
+                'name': proc['name'],
+                'pid': proc['pid'],
+                'cpu': round(proc['cpu_percent'], 1)
+            })
+    # Sorted by CPU in descending order
+    processes_cpu = sorted(processes_cpu, key=lambda x: x['cpu'], reverse=True)
+    
+    # Complete list of processes with RAM consumption
+    processes_ram = []
+    for proc in processes:
+        if proc['memory_percent'] > 0:  
+            processes_ram.append({
+                'name': proc['name'],
+                'pid': proc['pid'],
+                'memory': round(proc['memory_percent'], 1)
+            })
+    # Sorted by RAM in descending order
+    processes_ram = sorted(processes_ram, key=lambda x: x['memory'], reverse=True)
+    
+    # Top 3 most resource-intensive processes
+    top_3 = []
+
+    # A score is created for each process (CPU + RAM).
+    for proc in processes:
+        score = proc['cpu_percent'] + proc['memory_percent']
+        if score > 0:
+            top_3.append({
+                'name': proc['name'],
+                'pid': proc['pid'],
+                'cpu': round(proc['cpu_percent'], 1),
+                'memory': round(proc['memory_percent'], 1),
+                'score': round(score, 1)
+            })
+    # Sort by score in descending order and keep the top 3
+    top_3 = sorted(top_3, key=lambda x: x['score'], reverse=True)[:3]
+    
+    return {
+        'all_cpu': processes_cpu,
+        'all_ram': processes_ram,
+        'top_3': top_3
+    }
 
