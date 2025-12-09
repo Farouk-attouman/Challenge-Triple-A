@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Challenge Triple A - Dashboard Monitoring</title>
+    <link rel="stylesheet" href="template.css">
+</head>
+<body>
+    <!-- En-tête -->
+    <header>
+        <h1>🖥️ Dashboard de Monitoring Système</h1>
+        <p class="timestamp">Dernière mise à jour : {{timestamp}}</p>
+    </header>
+
+    <!-- Contenu principal -->
+    <main>
+        <!-- Section 1 : Informations Système -->
+        <section class="card system-info">
+            <h2>📊 Informations Système</h2>
+            <div class="info-grid">
+                <div class="info-item">
+                    <span class="label">Nom de la machine :</span>
+                    <span class="value">{{hostname}}</span>
+                </div>
+                <div class="info-item">
+                    <span class="label">Système d'exploitation :</span>
+                    <span class="value">{{os_name}}</span>
+                </div>
+                <div class="info-item">
+                    <span class="label">Uptime :</span>
+                    <span class="value">{{uptime}}</span>
+                </div>
+                <div class="info-item">
+                    <span class="label">Utilisateurs connectés :</span>
+                    <span class="value">{{users_count}}</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 2 : CPU -->
+        <section class="card cpu-info">
+            <h2>⚙️ Processeur (CPU)</h2>
+            <div class="info-grid">
+                <div class="info-item">
+                    <span class="label">Nombre de cœurs :</span>
+                    <span class="value">{{cpu_cores}}</span>
+                </div>
+                <div class="info-item">
+                    <span class="label">Fréquence :</span>
+                    <span class="value">{{cpu_freq}} MHz</span>
+                </div>
+            </div>
+            <div class="metric">
+                <span class="label">Utilisation CPU :</span>
+                <div class="progress-bar">
+                    <div class="progress-fill" style="width: {{cpu_percent}}%"></div>
+                </div>
+                <span class="percentage">{{cpu_percent}}%</span>
+            </div>
+        </section>
+
+        <!-- Section 3 : Mémoire -->
+        <section class="card memory-info">
+            <h2>💾 Mémoire (RAM)</h2>
+            <div class="info-grid">
+                <div class="info-item">
+                    <span class="label">RAM totale :</span>
+                    <span class="value">{{ram_total}} GB</span>
+                </div>
+                <div class="info-item">
+                    <span class="label">RAM utilisée :</span>
+                    <span class="value">{{ram_used}} GB</span>
+                </div>
+            </div>
+            <div class="metric">
+                <span class="label">Utilisation RAM :</span>
+                <div class="progress-bar">
+                    <div class="progress-fill" style="width: {{ram_percent}}%"></div>
+                </div>
+                <span class="percentage">{{ram_percent}}%</span>
+            </div>
+        </section>
+
+        <!-- Section 4 : Réseau -->
+        <section class="card network-info">
+            <h2>🌐 Réseau</h2>
+            <div class="info-item">
+                <span class="label">Adresse IP principale :</span>
+                <span class="value">{{ip_address}}</span>
+            </div>
+        </section>
+
+        <!-- Section 5 : Processus -->
+        <section class="card processes-info">
+            <h2>⚡ Top 3 Processus Gourmands</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Nom</th>
+                        <th>CPU %</th>
+                        <th>RAM %</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {{top_processes}}
+                </tbody>
+            </table>
+        </section>
+
+        <!-- Section 6 : Fichiers -->
+        <section class="card files-info">
+            <h2>📁 Analyse des Fichiers</h2>
+            <p class="info-text">Dossier analysé : {{analyzed_folder}}</p>
+            <div class="files-grid">
+                <div class="file-type">
+                    <span class="extension">.txt</span>
+                    <span class="count">{{txt_count}} fichiers</span>
+                    <span class="percentage">({{txt_percent}}%)</span>
+                </div>
+                <div class="file-type">
+                    <span class="extension">.py</span>
+                    <span class="count">{{py_count}} fichiers</span>
+                    <span class="percentage">({{py_percent}}%)</span>
+                </div>
+                <div class="file-type">
+                    <span class="extension">.pdf</span>
+                    <span class="count">{{pdf_count}} fichiers</span>
+                    <span class="percentage">({{pdf_percent}}%)</span>
+                </div>
+                <div class="file-type">
+                    <span class="extension">.jpg</span>
+                    <span class="count">{{jpg_count}} fichiers</span>
+                    <span class="percentage">({{jpg_percent}}%)</span>
+                </div>
+            </div>
+            <p class="total-files">Total : {{total_files}} fichiers analysés</p>
+        </section>
+    </main>
+
+    <!-- Pied de page -->
+    <footer>
+        <p>Challenge Triple A - Dashboard généré automatiquement par monitor.py</p>
+        <p>© 2024 - Projet académique</p>
+    </footer>
+</body>
+</html>
+

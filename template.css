@@ -1,0 +1,331 @@
+/* ===== RESET & BASE ===== */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: #333;
+    line-height: 1.6;
+    padding: 20px;
+    min-height: 100vh;
+}
+
+/* ===== HEADER ===== */
+header {
+    background: white;
+    padding: 30px;
+    border-radius: 10px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+header h1 {
+    color: #667eea;
+    font-size: 2.5em;
+    margin-bottom: 10px;
+}
+
+.timestamp {
+    color: #666;
+    font-size: 1.1em;
+}
+
+/* ===== MAIN CONTAINER ===== */
+main {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+    gap: 20px;
+}
+
+/* ===== CARDS ===== */
+.card {
+    background: white;
+    border-radius: 10px;
+    padding: 25px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+}
+
+.card h2 {
+    color: #667eea;
+    font-size: 1.5em;
+    margin-bottom: 20px;
+    border-bottom: 3px solid #667eea;
+    padding-bottom: 10px;
+}
+
+/* ===== INFO GRID ===== */
+.info-grid {
+    display: grid;
+    gap: 15px;
+    margin-bottom: 20px;
+}
+
+.info-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px;
+    background: #f8f9fa;
+    border-radius: 5px;
+}
+
+.label {
+    font-weight: 600;
+    color: #555;
+}
+
+.value {
+    color: #667eea;
+    font-weight: bold;
+}
+
+/* ===== PROGRESS BARS ===== */
+.metric {
+    margin-top: 20px;
+}
+
+.progress-bar {
+    width: 100%;
+    height: 30px;
+    background: #e9ecef;
+    border-radius: 15px;
+    overflow: hidden;
+    margin: 10px 0;
+    position: relative;
+}
+
+.progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
+    transition: width 0.5s ease;
+    border-radius: 15px;
+}
+
+.percentage {
+    display: inline-block;
+    font-weight: bold;
+    color: #667eea;
+    font-size: 1.2em;
+}
+
+/* ===== TABLE ===== */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 15px;
+}
+
+thead {
+    background: #667eea;
+    color: white;
+}
+
+th, td {
+    padding: 12px;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+}
+
+tbody tr:hover {
+    background: #f8f9fa;
+}
+
+/* ===== FILES SECTION ===== */
+.files-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 15px;
+    margin: 20px 0;
+}
+
+.file-type {
+    background: #f8f9fa;
+    padding: 15px;
+    border-radius: 8px;
+    text-align: center;
+}
+
+.extension {
+    display: block;
+    font-size: 1.5em;
+    font-weight: bold;
+    color: #667eea;
+    margin-bottom: 10px;
+}
+
+.count {
+    display: block;
+    color: #555;
+    margin-bottom: 5px;
+}
+
+.info-text, .total-files {
+    text-align: center;
+    color: #666;
+    margin: 10px 0;
+}
+
+/* ===== FOOTER ===== */
+footer {
+    background: white;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+    text-align: center;
+    margin-top: 30px;
+    max-width: 1200px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+footer p {
+    color: #666;
+    margin: 5px 0;
+}
+
+/* ===== RESPONSIVE ===== */
+@media (max-width: 768px) {
+    main {
+        grid-template-columns: 1fr;
+    }
+    
+    header h1 {
+        font-size: 1.8em;
+    }
+    
+    .files-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* ===== STYLES SPÉCIFIQUES PAR SECTION ===== */
+/* Système */
+.system-info {
+    grid-column: span 2;
+}
+
+.system-info .info-grid {
+    grid-template-columns: repeat(2, 1fr);
+}
+
+/* CPU */
+.cpu-info {
+    border-left: 4px solid #28a745;
+}
+
+.cpu-info h2 {
+    color: #28a745;
+    border-bottom-color: #28a745;
+}
+
+/* Mémoire */
+.memory-info {
+    border-left: 4px solid #17a2b8;
+}
+
+.memory-info h2 {
+    color: #17a2b8;
+    border-bottom-color: #17a2b8;
+}
+
+/* Réseau */
+.network-info {
+    border-left: 4px solid #ffc107;
+}
+
+.network-info h2 {
+    color: #ffc107;
+    border-bottom-color: #ffc107;
+}
+
+/* Processus */
+.processes-info {
+    grid-column: span 2;
+    border-left: 4px solid #dc3545;
+}
+
+.processes-info h2 {
+    color: #dc3545;
+    border-bottom-color: #dc3545;
+}
+
+/* Fichiers */
+.files-info {
+    grid-column: span 2;
+    border-left: 4px solid #6610f2;
+}
+
+.files-info h2 {
+    color: #6610f2;
+    border-bottom-color: #6610f2;
+}
+
+/* ===== BARRES DE PROGRESSION AMÉLIORÉES ===== */
+.progress-bar {
+    position: relative;
+    box-shadow: inset 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.progress-fill {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    padding-right: 10px;
+    color: white;
+    font-weight: bold;
+    animation: fillBar 1s ease-out;
+}
+
+@keyframes fillBar {
+    from {
+        width: 0 !important;
+    }
+}
+
+/* Effet de brillance */
+.progress-fill::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 50%;
+    background: linear-gradient(to bottom, rgba(255,255,255,0.3), transparent);
+    border-radius: 15px 15px 0 0;
+}
+
+/* ===== COULEURS DYNAMIQUES ===== */
+/* Vert : 0-50% */
+.progress-fill[style*="width: 0%"],
+.progress-fill[style*="width: 1"],
+.progress-fill[style*="width: 2"],
+.progress-fill[style*="width: 3"],
+.progress-fill[style*="width: 4"] {
+    background: linear-gradient(90deg, #28a745 0%, #20c997 100%);
+}
+
+/* Orange : 51-80% */
+.progress-fill[style*="width: 5"],
+.progress-fill[style*="width: 6"],
+.progress-fill[style*="width: 7"] {
+    background: linear-gradient(90deg, #ffc107 0%, #fd7e14 100%);
+}
+
+/* Rouge : 81-100% */
+.progress-fill[style*="width: 8"],
+.progress-fill[style*="width: 9"] {
+    background: linear-gradient(90deg, #dc3545 0%, #bd2130 100%);
+}
