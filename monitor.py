@@ -128,3 +128,41 @@ def get_top_processes():
         'top_3': top_3
     }
 
+def analyze_files(directory_path):
+    extensions = {'.txt': 0, '.py': 0, '.pdf': 0, '.jpg': 0}
+    total_files = 0
+
+    try:
+        for root, dirs, files in os.walk(directory_path):
+          for file in files:
+            total_files +=1
+            ext = os.path.splitext(file)[1].lower()
+            if ext in extensions:
+               extensions[ext] += 1
+
+    except PermissionError:
+       print(f"Permission denied to access {directory_path}")
+       
+    # Calculating percentages
+    file_stats = []
+    for ext, count in extensions.items():
+       percentage = (count / total_files * 100) if total_files > 0 else 0
+       file_stats.append({
+          'extension': ext,
+          'count': count,
+          'percentage': round(percentage, 1)
+       })
+    
+    return file_stats, total_files
+
+
+
+       
+            
+
+           
+
+              
+
+
+
