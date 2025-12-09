@@ -156,6 +156,100 @@ def analyze_files(directory_path):
     return file_stats, total_files
 
 
+def get_color_class(percentage):
+    if percentage <= 50:
+       return 'level-green'
+    elif percentage <= 80:
+       return 'level-orange'
+    else :
+       return 'level-red'
+
+def generate_html(data):
+    
+   # Reading the template
+    with open('template.html', 'r', encoding='utf-8') as f:
+        template = f.read()
+
+    # Generation timestamp
+    timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+
+    # Building the list of processes by CPU usage
+    processes_cpu_html = ""
+    for i, proc in enumerate(data['processes_cpu'][:10], 1):
+        processes_cpu_html += f"""
+                    <div class="process-item">
+                        <span class="process-rank">#{i}</span>
+                        <span class="process-name">{proc['name']} (PID: {proc['pid']})</span>
+                        <span class="process-stats">CPU: {proc['cpu']}%</span>
+                    </div>
+    """
+
+    # Building the list of processes by RAM usage
+    processes_ram_html = ""
+    for i, proc in enumerate(data['processes_ram'][:10], 1):
+        processes_ram_html += f"""
+                    <div class="process-item">
+                        <span class="process-rank">#{i}</span>
+                        <span class="process-name">{proc['name']} (PID: {proc['pid']})</span>
+                        <span class="process-stats">RAM: {proc['memory']}%</span>
+                    </div>
+    """
+
+    # Building the TOP 3 most resource-consuming processes
+    top3_html = ""
+    medals = ['🥇', '🥈', '🥉']
+    for i, proc in enumerate(data['top_3']):
+        top3_html += f"""
+                    <div class="process-item top-process">
+                        <span class="process-medal">{medals[i]}</span>
+                        <span class="process-name">{proc['name']} (PID: {proc['pid']})</span>
+                        <span class="process-stats">CPU: {proc['cpu']}% | RAM: {proc['memory']}%</span>
+                    </div>
+    """
+
+    # Building file statistics
+    files_html = ""
+    for stat in data['file_stats']:
+        files_html += f"""
+                    <div class="file-stat">
+                        <span class="file-type">{stat['extension']}</span>
+                        <span class="file-count">{stat['count']} files ({stat['percentage']}%)</span>
+                    </div>
+    """
+
+    # Replacing the variables inside the template
+    html = template.replace('{{ timestamp }}', timestamp)
+    html = html.replace('{{ hostname }}', data['hostname'])
+    html = html.replace('{{ os_name }}', data['os_name'])
+    html = html.replace('{{ uptime }}', data['uptime'])
+    html = html.replace('{{ users_count }}', str(data['users_count']))
+    html = html.replace('{{ cpu_count }}', str(data['cpu_count']))
+    html = html.replace('{{ cpu_freq }}', str(data['cpu_freq']))
+    html = html.replace('{{ cpu_percent }}', str(data['cpu_percent']))
+    html = html.replace('{{ cpu_color }}', data['cpu_color'])
+    html = html.replace('{{ ram_total }}', str(data['ram_total']))
+    html = html.replace('{{ ram_used }}', str(data['ram_used']))
+    html = html.replace('{{ ram_percent }}', str(data['ram_percent']))
+    html = html.replace('{{ ram_color }}', data['ram_color'])
+    html = html.replace('{{ ip_address }}', data['ip_address'])
+    html = html.replace('{{ processes_cpu_list }}', processes_cpu_html)
+    html = html.replace('{{ processes_ram_list }}', processes_ram_html)
+    html = html.replace('{{ top3_list }}', top3_html)
+    html = html.replace('{{ files_list }}', files_html)
+    html = html.replace('{{ total_files }}', str(data['total_files']))
+
+    # Writing the generated file
+    with open('index.html', 'w', encoding='utf-8') as f:
+        f.write(html)
+
+    print("✓ index.html file successfully generated!")
+
+   
+      
+   
+   
+
+
 
        
             
