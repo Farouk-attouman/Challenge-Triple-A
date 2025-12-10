@@ -1,22 +1,25 @@
-<!-- # Projet AAA - Dashboard Monitoring Linux
+# Projet AAA - Dashboard Monitoring Linux
 
-Dashboard de monitoring en temps reel pour machine virtuelle Ubuntu, sans JavaScript.
+[![Python](https://img.shields.io/badge/Python-3.8+-blue.svg)](https://www.python.org/)
+[![License](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
+
+Dashboard de monitoring en temps réel pour machine virtuelle Ubuntu.
 
 ## Description
 
-Ce projet permet de surveiller les ressources systeme d'une VM Linux et d'afficher les informations dans un dashboard web statique qui se rafraichit automatiquement.
+Ce projet permet de surveiller les ressources système d'une VM Linux et d'afficher les informations dans un dashboard web statique qui se rafraîchit automatiquement.
 
-### Fonctionnalites
+### Fonctionnalités
 
-- **Systeme** : Hostname, OS, architecture, uptime
-- **CPU** : Utilisation globale et par coeur, load average
-- **Memoire** : RAM et Swap (utilisation, disponible)
-- **Disque** : Espace utilise/libre
-- **Reseau** : Donnees envoyees/recues, interfaces
-- **Processus** : Top 3 CPU et memoire
+- **Système** : Hostname, OS, architecture, uptime
+- **CPU** : Utilisation globale et par cœur, load average
+- **Mémoire** : RAM et Swap (utilisation, disponible)
+- **Disque** : Espace utilisé/libre
+- **Réseau** : Données envoyées/reçues, interfaces
+- **Processus** : Top 3 CPU et mémoire
 - **Fichiers** : Analyse par extension, plus gros fichiers
 
-## Prerequis
+## Prérequis
 
 - Ubuntu Desktop 22.04 LTS (ou autre distribution Linux)
 - Python 3.8+
@@ -24,23 +27,23 @@ Ce projet permet de surveiller les ressources systeme d'une VM Linux et d'affich
 
 ## Installation
 
-bash
+```bash
 # 1. Cloner le projet
 git clone <url-du-repo>
 cd AAA
 
-# 2. Creer l'environnement virtuel
+# 2. Créer l'environnement virtuel
 python3 -m venv venv
 source venv/bin/activate
 
-# 3. Installer les dependances
+# 3. Installer les dépendances
 pip install -r requirements.txt
-
+```
 
 ## Utilisation
 
 ```bash
-# Lancer le monitoring (genere index.html)
+# Lancer le monitoring (génère index.html)
 python monitor.py
 
 # Options disponibles
@@ -50,79 +53,62 @@ python monitor.py --output dashboard.html
 python monitor.py --verbose
 ```
 
-Ouvrir `index.html` dans un navigateur web. La page se rafraichit automatiquement toutes les 30 secondes.
+Ouvrir `index.html` dans un navigateur web. La page se rafraîchit automatiquement toutes les 30 secondes.
 
 ## Architecture
 
-Le projet suit une architecture en couches pour la modularite :
+Le projet suit une architecture en couches pour la modularité :
 
 ```
 AAA/
 ├── src/
-│   ├── api/                 # Couche API (generation HTML)
+│   ├── api/                 # Couche API (génération HTML)
 │   │   ├── __init__.py
 │   │   └── html_generator.py
-│   ├── core/                # Couche Core (logique metier)
+│   ├── core/                # Couche Core (logique métier)
 │   │   ├── __init__.py
 │   │   └── data_processor.py
-│   └── data/                # Couche Data (acces systeme)
+│   └── data/                # Couche Data (accès système)
 │       ├── __init__.py
 │       └── system_collector.py
 ├── monitor.py               # Script principal
 ├── template.html            # Template HTML avec variables
 ├── template.css             # Styles CSS avec gauges
-├── index.html               # Dashboard genere (gitignore)
-├── requirements.txt         # Dependances Python
+├── index.html               # Dashboard généré (gitignore)
+├── requirements.txt         # Dépendances Python
 ├── .gitignore
 └── README.md
 ```
 
 ### Couches
 
-| Couche | Role | Module |
+| Couche | Rôle | Module |
 |--------|------|--------|
-| **Data** | Collecte des donnees via psutil | `system_collector.py` |
-| **Core** | Traitement et formatage des donnees | `data_processor.py` |
+| **Data** | Collecte des données via psutil | `system_collector.py` |
+| **Core** | Traitement et formatage des données | `data_processor.py` |
 | **API** | Substitution des variables dans le template | `html_generator.py` |
 
-## Indicateurs Colores
+## Indicateurs Colorés
 
 Les gauges utilisent un code couleur selon les seuils :
 
 | Couleur | Plage | Signification |
 |---------|-------|---------------|
-| Vert | 0-50% | Normal |
-| Orange | 51-80% | Attention |
-| Rouge | 81-100% | Critique |
-
-## Captures d'ecran
-
-*A ajouter dans le dossier `screenshots/`*
-
-- `terminal.png` : Execution du script dans le terminal
-- `index.png` : Dashboard dans le navigateur
-
-## Difficultes Rencontrees
-
-- Configuration de l'environnement virtuel Python sur Ubuntu
-- Gestion des permissions pour acceder aux informations systeme
-- Analyse recursive des fichiers avec gestion des erreurs d'acces
-
-## Ameliorations Possibles
-
-- Historique des metriques avec graphiques
-- Alertes par email en cas de seuils depasses
-- Interface d'administration pour configurer les parametres
-- Support multi-machines avec aggregation des donnees
-- Export des donnees en JSON/CSV
+| 🟢 Vert | 0-50% | Normal |
+| 🟠 Orange | 51-80% | Attention |
+| 🔴 Rouge | 81-100% | Critique |
 
 ## Technologies
 
 - **Python 3** : Langage principal
-- **psutil** : Bibliotheque de collecte systeme
-- **HTML5** : Structure semantique
-- **CSS3** : Styles avec Flexbox/Grid, gauges animees
+- **psutil** : Bibliothèque de collecte système
+- **HTML5** : Structure sémantique
+- **CSS3** : Styles avec Flexbox/Grid, gauges animées
+
+## Contribuer
+
+Les contributions sont les bienvenues ! N'hésitez pas à ouvrir une issue ou une pull request.
 
 ## Licence
 
-Projet educatif - Libre d'utilisation -->
+Projet éducatif - Libre d'utilisation
