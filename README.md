@@ -1,7 +1,6 @@
 # Projet AAA - Dashboard Monitoring Linux
 
 [![Python](https://img.shields.io/badge/Python-3.8+-blue.svg)](https://www.python.org/)
-[![License](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
 
 Dashboard de monitoring en temps réel pour machine virtuelle Ubuntu.
 
@@ -30,7 +29,7 @@ Ce projet permet de surveiller les ressources système d'une VM Linux et d'affic
 ```bash
 # 1. Cloner le projet
 git clone <url-du-repo>
-cd AAA
+cd Challenge-Triple-A
 
 # 2. Créer l'environnement virtuel
 python3 -m venv venv
@@ -50,6 +49,7 @@ python monitor.py
 python monitor.py --help
 python monitor.py --directory /home/user/Documents
 python monitor.py --output dashboard.html
+python monitor.py --template custom_template.html
 python monitor.py --verbose
 ```
 
@@ -60,8 +60,9 @@ Ouvrir `index.html` dans un navigateur web. La page se rafraîchit automatiqueme
 Le projet suit une architecture en couches pour la modularité :
 
 ```
-AAA/
+Challenge-Triple-A/
 ├── src/
+│   ├── __init__.py
 │   ├── api/                 # Couche API (génération HTML)
 │   │   ├── __init__.py
 │   │   └── html_generator.py
@@ -71,6 +72,9 @@ AAA/
 │   └── data/                # Couche Data (accès système)
 │       ├── __init__.py
 │       └── system_collector.py
+├── tests/
+│   ├── __init__.py
+│   └── test_main.py
 ├── monitor.py               # Script principal
 ├── template.html            # Template HTML avec variables
 ├── template.css             # Styles CSS avec gauges
