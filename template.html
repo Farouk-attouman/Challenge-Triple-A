@@ -3,146 +3,252 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Challenge Triple A - Dashboard Monitoring</title>
+    <meta http-equiv="refresh" content="30">
+    <title>Dashboard Monitoring - {{system_hostname}}</title>
     <link rel="stylesheet" href="template.css">
 </head>
 <body>
-    <!-- En-tête -->
-    <header>
-        <h1>🖥️ Dashboard de Monitoring Système</h1>
-        <p class="timestamp">Dernière mise à jour : {{timestamp}}</p>
+    <header role="banner">
+        <h1>Dashboard Monitoring</h1>
+        <p class="subtitle">Machine: <strong>{{system_hostname}}</strong></p>
+        <p class="timestamp">Derniere mise a jour: {{timestamp}}</p>
     </header>
 
-    <!-- Contenu principal -->
-    <main>
-        <!-- Section 1 : Informations Système -->
-        <section class="card system-info">
-            <h2>📊 Informations Système</h2>
+    <main role="main">
+        <!-- Section Systeme -->
+        <section class="card" aria-labelledby="system-title">
+            <h2 id="system-title">Systeme</h2>
             <div class="info-grid">
                 <div class="info-item">
-                    <span class="label">Nom de la machine :</span>
-                    <span class="value">{{hostname}}</span>
+                    <span class="label">Hostname</span>
+                    <span class="value">{{system_hostname}}</span>
                 </div>
                 <div class="info-item">
-                    <span class="label">Système d'exploitation :</span>
-                    <span class="value">{{os_name}}</span>
+                    <span class="label">OS</span>
+                    <span class="value">{{system_os}} {{system_os_version}}</span>
                 </div>
                 <div class="info-item">
-                    <span class="label">Uptime :</span>
-                    <span class="value">{{uptime}}</span>
+                    <span class="label">Architecture</span>
+                    <span class="value">{{system_architecture}}</span>
                 </div>
                 <div class="info-item">
-                    <span class="label">Utilisateurs connectés :</span>
-                    <span class="value">{{users_count}}</span>
+                    <span class="label">Demarrage</span>
+                    <span class="value">{{system_boot_time}}</span>
+                </div>
+                <div class="info-item">
+                    <span class="label">Uptime</span>
+                    <span class="value">{{system_uptime}}</span>
+                </div>
+                <div class="info-item">
+                    <span class="label">Python</span>
+                    <span class="value">{{system_python_version}}</span>
                 </div>
             </div>
         </section>
 
-        <!-- Section 2 : CPU -->
-        <section class="card cpu-info">
-            <h2>⚙️ Processeur (CPU)</h2>
+        <!-- Section CPU -->
+        <section class="card" aria-labelledby="cpu-title">
+            <h2 id="cpu-title">CPU</h2>
+            <div class="gauge-container">
+                <div class="gauge">
+                    <div class="gauge-fill {{cpu_color_class}}" style="width: {{cpu_percent_int}}%;" role="progressbar" aria-valuenow="{{cpu_percent_int}}" aria-valuemin="0" aria-valuemax="100"></div>
+                </div>
+                <span class="gauge-label">{{cpu_percent}}%</span>
+            </div>
             <div class="info-grid">
                 <div class="info-item">
-                    <span class="label">Nombre de cœurs :</span>
-                    <span class="value">{{cpu_cores}}</span>
+                    <span class="label">Coeurs physiques</span>
+                    <span class="value">{{cpu_physical_cores}}</span>
                 </div>
                 <div class="info-item">
-                    <span class="label">Fréquence :</span>
-                    <span class="value">{{cpu_freq}} MHz</span>
+                    <span class="label">Coeurs logiques</span>
+                    <span class="value">{{cpu_logical_cores}}</span>
+                </div>
+                <div class="info-item">
+                    <span class="label">Frequence</span>
+                    <span class="value">{{cpu_freq_current}} MHz</span>
+                </div>
+                <div class="info-item">
+                    <span class="label">Load Average</span>
+                    <span class="value">{{cpu_load_1min}} | {{cpu_load_5min}} | {{cpu_load_15min}}</span>
                 </div>
             </div>
-            <div class="metric">
-                <span class="label">Utilisation CPU :</span>
-                <div class="progress-bar">
-                    <div class="progress-fill" style="width: {{cpu_percent}}%"></div>
-                </div>
-                <span class="percentage">{{cpu_percent}}%</span>
+            <h3>Utilisation par coeur</h3>
+            <div class="cores-grid">
+                {{cpu_cores_html}}
             </div>
         </section>
 
-        <!-- Section 3 : Mémoire -->
-        <section class="card memory-info">
-            <h2>💾 Mémoire (RAM)</h2>
+        <!-- Section Memoire -->
+        <section class="card" aria-labelledby="memory-title">
+            <h2 id="memory-title">Memoire</h2>
+            <h3>RAM</h3>
+            <div class="gauge-container">
+                <div class="gauge">
+                    <div class="gauge-fill {{memory_color_class}}" style="width: {{memory_percent_int}}%;" role="progressbar" aria-valuenow="{{memory_percent_int}}" aria-valuemin="0" aria-valuemax="100"></div>
+                </div>
+                <span class="gauge-label">{{memory_percent}}%</span>
+            </div>
             <div class="info-grid">
                 <div class="info-item">
-                    <span class="label">RAM totale :</span>
-                    <span class="value">{{ram_total}} GB</span>
+                    <span class="label">Total</span>
+                    <span class="value">{{memory_total}}</span>
                 </div>
                 <div class="info-item">
-                    <span class="label">RAM utilisée :</span>
-                    <span class="value">{{ram_used}} GB</span>
+                    <span class="label">Utilise</span>
+                    <span class="value">{{memory_used}}</span>
+                </div>
+                <div class="info-item">
+                    <span class="label">Disponible</span>
+                    <span class="value">{{memory_available}}</span>
                 </div>
             </div>
-            <div class="metric">
-                <span class="label">Utilisation RAM :</span>
-                <div class="progress-bar">
-                    <div class="progress-fill" style="width: {{ram_percent}}%"></div>
+            <h3>Swap</h3>
+            <div class="gauge-container">
+                <div class="gauge">
+                    <div class="gauge-fill {{swap_color_class}}" style="width: {{swap_percent_int}}%;" role="progressbar" aria-valuenow="{{swap_percent_int}}" aria-valuemin="0" aria-valuemax="100"></div>
                 </div>
-                <span class="percentage">{{ram_percent}}%</span>
+                <span class="gauge-label">{{swap_percent}}%</span>
+            </div>
+            <div class="info-grid">
+                <div class="info-item">
+                    <span class="label">Total</span>
+                    <span class="value">{{swap_total}}</span>
+                </div>
+                <div class="info-item">
+                    <span class="label">Utilise</span>
+                    <span class="value">{{swap_used}}</span>
+                </div>
             </div>
         </section>
 
-        <!-- Section 4 : Réseau -->
-        <section class="card network-info">
-            <h2>🌐 Réseau</h2>
-            <div class="info-item">
-                <span class="label">Adresse IP principale :</span>
-                <span class="value">{{ip_address}}</span>
+        <!-- Section Disque -->
+        <section class="card" aria-labelledby="disk-title">
+            <h2 id="disk-title">Disque</h2>
+            <div class="gauge-container">
+                <div class="gauge">
+                    <div class="gauge-fill {{disk_color_class}}" style="width: {{disk_percent_int}}%;" role="progressbar" aria-valuenow="{{disk_percent_int}}" aria-valuemin="0" aria-valuemax="100"></div>
+                </div>
+                <span class="gauge-label">{{disk_percent}}%</span>
+            </div>
+            <div class="info-grid">
+                <div class="info-item">
+                    <span class="label">Total</span>
+                    <span class="value">{{disk_total}}</span>
+                </div>
+                <div class="info-item">
+                    <span class="label">Utilise</span>
+                    <span class="value">{{disk_used}}</span>
+                </div>
+                <div class="info-item">
+                    <span class="label">Libre</span>
+                    <span class="value">{{disk_free}}</span>
+                </div>
             </div>
         </section>
 
-        <!-- Section 5 : Processus -->
-        <section class="card processes-info">
-            <h2>⚡ Top 3 Processus Gourmands</h2>
-            <table>
+        <!-- Section Reseau -->
+        <section class="card" aria-labelledby="network-title">
+            <h2 id="network-title">Reseau</h2>
+            <div class="info-grid">
+                <div class="info-item">
+                    <span class="label">Donnees envoyees</span>
+                    <span class="value">{{network_bytes_sent}}</span>
+                </div>
+                <div class="info-item">
+                    <span class="label">Donnees recues</span>
+                    <span class="value">{{network_bytes_recv}}</span>
+                </div>
+                <div class="info-item">
+                    <span class="label">Paquets envoyes</span>
+                    <span class="value">{{network_packets_sent}}</span>
+                </div>
+                <div class="info-item">
+                    <span class="label">Paquets recus</span>
+                    <span class="value">{{network_packets_recv}}</span>
+                </div>
+            </div>
+            <h3>Interfaces</h3>
+            <ul class="interfaces-list" role="list">
+                {{network_interfaces_html}}
+            </ul>
+        </section>
+
+        <!-- Section Processus -->
+        <section class="card" aria-labelledby="processes-title">
+            <h2 id="processes-title">Processus</h2>
+            <p class="total-count">Total: <strong>{{processes_total}}</strong> processus actifs</p>
+
+            <h3>Top 3 - Consommation CPU</h3>
+            <table class="process-table" role="table" aria-label="Processus par CPU">
                 <thead>
                     <tr>
-                        <th>Nom</th>
-                        <th>CPU %</th>
-                        <th>RAM %</th>
+                        <th scope="col">PID</th>
+                        <th scope="col">Nom</th>
+                        <th scope="col">CPU</th>
+                        <th scope="col">Memoire</th>
                     </tr>
                 </thead>
                 <tbody>
-                    {{top_processes}}
+                    {{processes_top_cpu_html}}
+                </tbody>
+            </table>
+
+            <h3>Top 3 - Consommation Memoire</h3>
+            <table class="process-table" role="table" aria-label="Processus par memoire">
+                <thead>
+                    <tr>
+                        <th scope="col">PID</th>
+                        <th scope="col">Nom</th>
+                        <th scope="col">CPU</th>
+                        <th scope="col">Memoire</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {{processes_top_memory_html}}
                 </tbody>
             </table>
         </section>
 
-        <!-- Section 6 : Fichiers -->
-        <section class="card files-info">
-            <h2>📁 Analyse des Fichiers</h2>
-            <p class="info-text">Dossier analysé : {{analyzed_folder}}</p>
-            <div class="files-grid">
-                <div class="file-type">
-                    <span class="extension">.txt</span>
-                    <span class="count">{{txt_count}} fichiers</span>
-                    <span class="percentage">({{txt_percent}}%)</span>
-                </div>
-                <div class="file-type">
-                    <span class="extension">.py</span>
-                    <span class="count">{{py_count}} fichiers</span>
-                    <span class="percentage">({{py_percent}}%)</span>
-                </div>
-                <div class="file-type">
-                    <span class="extension">.pdf</span>
-                    <span class="count">{{pdf_count}} fichiers</span>
-                    <span class="percentage">({{pdf_percent}}%)</span>
-                </div>
-                <div class="file-type">
-                    <span class="extension">.jpg</span>
-                    <span class="count">{{jpg_count}} fichiers</span>
-                    <span class="percentage">({{jpg_percent}}%)</span>
-                </div>
-            </div>
-            <p class="total-files">Total : {{total_files}} fichiers analysés</p>
+        <!-- Section Fichiers -->
+        <section class="card" aria-labelledby="files-title">
+            <h2 id="files-title">Fichiers</h2>
+            <p class="directory-info">Repertoire analyse: <code>{{files_directory}}</code></p>
+            <p class="total-count">Total: <strong>{{files_total}}</strong> fichiers</p>
+
+            <h3>Repartition par extension</h3>
+            <table class="files-table" role="table" aria-label="Fichiers par extension">
+                <thead>
+                    <tr>
+                        <th scope="col">Extension</th>
+                        <th scope="col">Nombre</th>
+                        <th scope="col">Taille</th>
+                        <th scope="col">Pourcentage</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {{files_extensions_html}}
+                </tbody>
+            </table>
+
+            <h3>Fichiers les plus volumineux</h3>
+            <table class="files-table" role="table" aria-label="Plus gros fichiers">
+                <thead>
+                    <tr>
+                        <th scope="col">Nom</th>
+                        <th scope="col">Taille</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {{files_largest_html}}
+                </tbody>
+            </table>
         </section>
     </main>
 
-    <!-- Pied de page -->
-    <footer>
-        <p>Challenge Triple A - Dashboard généré automatiquement par monitor.py</p>
-        <p>© 2024 - Projet académique</p>
+    <footer role="contentinfo">
+        <p>Dashboard Monitoring - Projet AAA</p>
+        <p>Actualisation automatique toutes les 30 secondes</p>
     </footer>
 </body>
 </html>
-

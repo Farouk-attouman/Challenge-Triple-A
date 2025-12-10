@@ -1,142 +1,118 @@
-# 🖥️ Challenge Triple A - Dashboard de Monitoring
+# Projet AAA - Dashboard Monitoring Linux
 
-## 📋 Description
+[![Python](https://img.shields.io/badge/Python-3.8+-blue.svg)](https://www.python.org/)
 
-Dashboard web de monitoring système en temps réel développé dans le cadre du Challenge Triple A. Cette application collecte et affiche les statistiques d'une machine virtuelle Linux (CPU, RAM, processus, réseau, fichiers) via une interface web élégante et responsive.
+Dashboard de monitoring en temps réel pour machine virtuelle Ubuntu.
 
-**Challenge Triple A** = **Administration** + **Algorithmique** + **Affichage**
+## Description
 
-## ✨ Fonctionnalités
+Ce projet permet de surveiller les ressources système d'une VM Linux et d'afficher les informations dans un dashboard web statique qui se rafraîchit automatiquement.
 
-### Monitoring Système
-- 📊 **Informations système** : Hostname, OS, uptime, utilisateurs connectés
-- ⚙️ **CPU** : Nombre de cœurs, fréquence, pourcentage d'utilisation
-- 💾 **Mémoire** : RAM totale/utilisée avec barres de progression
-- 🌐 **Réseau** : Adresse IP principale
-- ⚡ **Processus** : Top 3 des processus les plus gourmands en ressources
-- 📁 **Fichiers** : Analyse et statistiques par type de fichiers (.txt, .py, .pdf, .jpg)
+### Fonctionnalités
 
-### Interface Web
-- Design moderne et responsive
-- Barres de progression animées
-- Code couleur par section
-- Mise à jour manuelle des données
+- **Système** : Hostname, OS, architecture, uptime
+- **CPU** : Utilisation globale et par cœur, load average
+- **Mémoire** : RAM et Swap (utilisation, disponible)
+- **Disque** : Espace utilisé/libre
+- **Réseau** : Données envoyées/reçues, interfaces
+- **Processus** : Top 3 CPU et mémoire
+- **Fichiers** : Analyse par extension, plus gros fichiers
 
-## 🔧 Prérequis
+## Prérequis
 
-### Machine Virtuelle
-- **OS** : Ubuntu Desktop 22.04 LTS ou supérieur
-- **RAM** : 2 GB minimum
-- **Disque** : 15 GB
-- **Réseau** : Accès internet
-
-### Logiciels
-- Python 3.10+
+- Ubuntu Desktop 22.04 LTS (ou autre distribution Linux)
+- Python 3.8+
 - pip3
-- Navigateur web (Firefox, Chrome, etc.)
 
-## 📥 Installation
-
-### 1. Cloner le dépôt
+## Installation
 
 ```bash
-git clone https://github.com/votre-nom/AAA.git
-cd AAA
-2. Installer les dépendances Python
-# Mettre à jour pip
-pip3 install --upgrade pip
+# 1. Cloner le projet
+git clone <url-du-repo>
+cd Challenge-Triple-A
 
-# Installer psutil (obligatoire)
-pip3 install psutil
+# 2. Créer l'environnement virtuel
+python3 -m venv venv
+source venv/bin/activate
 
-# Installer distro (optionnel, pour info OS détaillées)
-pip3 install distro
-3. Vérifier l'installation
-python3 -c "import psutil; print('✅ psutil OK')"
+# 3. Installer les dépendances
+pip install -r requirements.txt
+```
 
-🚀 Utilisation
-Générer le dashboard
-# Dans le dossier du projet
-python3 monitor.py
-Le script va :
-    1. Collecter toutes les données système
-    2. Générer le fichier index.html
-    3. Afficher un message de confirmation
-Visualiser le dashboard
-# Ouvrir avec le navigateur par défaut
-xdg-open index.html
+## Utilisation
 
-# Ou avec Firefox
-firefox index.html
+```bash
+# Lancer le monitoring (génère index.html)
+python monitor.py
 
-# Ou avec Chrome
-google-chrome index.html
-Actualiser les données
-Pour mettre à jour le dashboard avec de nouvelles données :
-python3 monitor.py
-# Puis rafraîchir la page dans le navigateur (F5)
+# Options disponibles
+python monitor.py --help
+python monitor.py --directory /home/user/Documents
+python monitor.py --output dashboard.html
+python monitor.py --template custom_template.html
+python monitor.py --verbose
+```
 
-📁 Structure du Projet
-AAA/
-├── README.md              # Documentation du projet
-├── monitor.py             # Script Python de collecte
-├── template.html          # Template HTML avec variables
-├── template.css           # Feuille de style
-├── index.html             # HTML généré (exemple)
-├── screenshots/           # Captures d'écran
-│   ├── terminal.png      # Exécution du script
-│   └── index.png         # Dashboard final
-└── .gitignore            # Fichiers à ignorer
-📸 Captures d'Écran
-Terminal
+Ouvrir `index.html` dans un navigateur web. La page se rafraîchit automatiquement toutes les 30 secondes.
 
-Dashboard
+## Architecture
 
-🛠️ Technologies Utilisées
-    • Python 3 : Langage de programmation
-    • psutil : Bibliothèque de monitoring système
-    • HTML5 : Structure sémantique
-    • CSS3 : Styles et animations
-    • Ubuntu Linux : Système d'exploitation
-    
-🐛 Difficultés Rencontrées
-1. Récupération de l'adresse IP
-Problème : Difficulté à identifier l'IP principale parmi plusieurs interfaces réseau.
-Solution : Utilisation d'une connexion socket vers un DNS public (8.8.8.8) pour déterminer l'interface active.
-2. Pourcentage CPU des processus
-Problème : Beaucoup de processus affichaient 0.0% de CPU.
-Solution : Ajout d'un intervalle de mesure avec cpu_percent(interval=0.1).
-3. Permissions sur certains fichiers
-Problème : Erreurs PermissionDenied lors de l'analyse de fichiers.
-Solution : Gestion des exceptions avec try/except pour ignorer les fichiers inaccessibles.
-4. Conversion des unités de mémoire
-Problème : Affichage de la RAM en octets (illisible).
-Solution : Conversion en GB avec total / (1024**3) et arrondi à 2 décimales.
+Le projet suit une architecture en couches pour la modularité :
 
-🚀 Améliorations Possibles
-Court terme
-    • [ ] Ajouter un rafraîchissement automatique toutes les 30 secondes
-    • [ ] Implémenter un code couleur (vert/orange/rouge) selon les seuils d'utilisation
-    • [ ] Ajouter des graphiques avec Chart.js ou Plotly
-    • [ ] Afficher l'utilisation par cœur CPU
-Moyen terme
-    • [ ] Analyse récursive des sous-dossiers
-    • [ ] Support de plus d'extensions de fichiers (10+)
-    • [ ] Calcul de l'espace disque par type de fichier
-    • [ ] Historique des mesures sur 24h
-Long terme
-    • [ ] Mode serveur avec Flask pour accès distant
-    • [ ] Authentification utilisateur
-    • [ ] Base de données pour stocker l'historique
-    • [ ] Alertes email/SMS en cas de dépassement de seuils
-    • [ ] Dashboard responsive avec graphiques interactifs
-👥 Auteurs
-    • Farouk - Administration & Python
-    • Claude - Python & HTML
-    • Lamali - Design & CSS
-📝 Licence
-Projet académique réalisé dans le cadre du Challenge Triple A.
-🙏 Remerciements
-    • L'équipe pédagogique pour le sujet du Challenge
-    • La documentation de psutil
-    • La communauté Ubuntu
+```
+Challenge-Triple-A/
+├── src/
+│   ├── __init__.py
+│   ├── api/                 # Couche API (génération HTML)
+│   │   ├── __init__.py
+│   │   └── html_generator.py
+│   ├── core/                # Couche Core (logique métier)
+│   │   ├── __init__.py
+│   │   └── data_processor.py
+│   └── data/                # Couche Data (accès système)
+│       ├── __init__.py
+│       └── system_collector.py
+├── tests/
+│   ├── __init__.py
+│   └── test_main.py
+├── monitor.py               # Script principal
+├── template.html            # Template HTML avec variables
+├── template.css             # Styles CSS avec gauges
+├── index.html               # Dashboard généré (gitignore)
+├── requirements.txt         # Dépendances Python
+├── .gitignore
+└── README.md
+```
+
+### Couches
+
+| Couche | Rôle | Module |
+|--------|------|--------|
+| **Data** | Collecte des données via psutil | `system_collector.py` |
+| **Core** | Traitement et formatage des données | `data_processor.py` |
+| **API** | Substitution des variables dans le template | `html_generator.py` |
+
+## Indicateurs Colorés
+
+Les gauges utilisent un code couleur selon les seuils :
+
+| Couleur | Plage | Signification |
+|---------|-------|---------------|
+| 🟢 Vert | 0-50% | Normal |
+| 🟠 Orange | 51-80% | Attention |
+| 🔴 Rouge | 81-100% | Critique |
+
+## Technologies
+
+- **Python 3** : Langage principal
+- **psutil** : Bibliothèque de collecte système
+- **HTML5** : Structure sémantique
+- **CSS3** : Styles avec Flexbox/Grid, gauges animées
+
+## Contribuer
+
+Les contributions sont les bienvenues ! N'hésitez pas à ouvrir une issue ou une pull request.
+
+## Licence
+
+Projet éducatif - Libre d'utilisation
