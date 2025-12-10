@@ -1,142 +1,128 @@
-# 🖥️ Challenge Triple A - Dashboard de Monitoring
+<!-- # Projet AAA - Dashboard Monitoring Linux
 
-## 📋 Description
+Dashboard de monitoring en temps reel pour machine virtuelle Ubuntu, sans JavaScript.
 
-Dashboard web de monitoring système en temps réel développé dans le cadre du Challenge Triple A. Cette application collecte et affiche les statistiques d'une machine virtuelle Linux (CPU, RAM, processus, réseau, fichiers) via une interface web élégante et responsive.
+## Description
 
-**Challenge Triple A** = **Administration** + **Algorithmique** + **Affichage**
+Ce projet permet de surveiller les ressources systeme d'une VM Linux et d'afficher les informations dans un dashboard web statique qui se rafraichit automatiquement.
 
-## ✨ Fonctionnalités
+### Fonctionnalites
 
-### Monitoring Système
-- 📊 **Informations système** : Hostname, OS, uptime, utilisateurs connectés
-- ⚙️ **CPU** : Nombre de cœurs, fréquence, pourcentage d'utilisation
-- 💾 **Mémoire** : RAM totale/utilisée avec barres de progression
-- 🌐 **Réseau** : Adresse IP principale
-- ⚡ **Processus** : Top 3 des processus les plus gourmands en ressources
-- 📁 **Fichiers** : Analyse et statistiques par type de fichiers (.txt, .py, .pdf, .jpg)
+- **Systeme** : Hostname, OS, architecture, uptime
+- **CPU** : Utilisation globale et par coeur, load average
+- **Memoire** : RAM et Swap (utilisation, disponible)
+- **Disque** : Espace utilise/libre
+- **Reseau** : Donnees envoyees/recues, interfaces
+- **Processus** : Top 3 CPU et memoire
+- **Fichiers** : Analyse par extension, plus gros fichiers
 
-### Interface Web
-- Design moderne et responsive
-- Barres de progression animées
-- Code couleur par section
-- Mise à jour manuelle des données
+## Prerequis
 
-## 🔧 Prérequis
-
-### Machine Virtuelle
-- **OS** : Ubuntu Desktop 22.04 LTS ou supérieur
-- **RAM** : 2 GB minimum
-- **Disque** : 15 GB
-- **Réseau** : Accès internet
-
-### Logiciels
-- Python 3.10+
+- Ubuntu Desktop 22.04 LTS (ou autre distribution Linux)
+- Python 3.8+
 - pip3
-- Navigateur web (Firefox, Chrome, etc.)
 
-## 📥 Installation
+## Installation
 
-### 1. Cloner le dépôt
+bash
+# 1. Cloner le projet
+git clone <url-du-repo>
+cd AAA
+
+# 2. Creer l'environnement virtuel
+python3 -m venv venv
+source venv/bin/activate
+
+# 3. Installer les dependances
+pip install -r requirements.txt
+
+
+## Utilisation
 
 ```bash
-git clone https://github.com/votre-nom/AAA.git
-cd AAA
-2. Installer les dépendances Python
-# Mettre à jour pip
-pip3 install --upgrade pip
+# Lancer le monitoring (genere index.html)
+python monitor.py
 
-# Installer psutil (obligatoire)
-pip3 install psutil
+# Options disponibles
+python monitor.py --help
+python monitor.py --directory /home/user/Documents
+python monitor.py --output dashboard.html
+python monitor.py --verbose
+```
 
-# Installer distro (optionnel, pour info OS détaillées)
-pip3 install distro
-3. Vérifier l'installation
-python3 -c "import psutil; print('✅ psutil OK')"
+Ouvrir `index.html` dans un navigateur web. La page se rafraichit automatiquement toutes les 30 secondes.
 
-🚀 Utilisation
-Générer le dashboard
-# Dans le dossier du projet
-python3 monitor.py
-Le script va :
-    1. Collecter toutes les données système
-    2. Générer le fichier index.html
-    3. Afficher un message de confirmation
-Visualiser le dashboard
-# Ouvrir avec le navigateur par défaut
-xdg-open index.html
+## Architecture
 
-# Ou avec Firefox
-firefox index.html
+Le projet suit une architecture en couches pour la modularite :
 
-# Ou avec Chrome
-google-chrome index.html
-Actualiser les données
-Pour mettre à jour le dashboard avec de nouvelles données :
-python3 monitor.py
-# Puis rafraîchir la page dans le navigateur (F5)
-
-📁 Structure du Projet
+```
 AAA/
-├── README.md              # Documentation du projet
-├── monitor.py             # Script Python de collecte
-├── template.html          # Template HTML avec variables
-├── template.css           # Feuille de style
-├── index.html             # HTML généré (exemple)
-├── screenshots/           # Captures d'écran
-│   ├── terminal.png      # Exécution du script
-│   └── index.png         # Dashboard final
-└── .gitignore            # Fichiers à ignorer
-📸 Captures d'Écran
-Terminal
+├── src/
+│   ├── api/                 # Couche API (generation HTML)
+│   │   ├── __init__.py
+│   │   └── html_generator.py
+│   ├── core/                # Couche Core (logique metier)
+│   │   ├── __init__.py
+│   │   └── data_processor.py
+│   └── data/                # Couche Data (acces systeme)
+│       ├── __init__.py
+│       └── system_collector.py
+├── monitor.py               # Script principal
+├── template.html            # Template HTML avec variables
+├── template.css             # Styles CSS avec gauges
+├── index.html               # Dashboard genere (gitignore)
+├── requirements.txt         # Dependances Python
+├── .gitignore
+└── README.md
+```
 
-Dashboard
+### Couches
 
-🛠️ Technologies Utilisées
-    • Python 3 : Langage de programmation
-    • psutil : Bibliothèque de monitoring système
-    • HTML5 : Structure sémantique
-    • CSS3 : Styles et animations
-    • Ubuntu Linux : Système d'exploitation
-    
-🐛 Difficultés Rencontrées
-1. Récupération de l'adresse IP
-Problème : Difficulté à identifier l'IP principale parmi plusieurs interfaces réseau.
-Solution : Utilisation d'une connexion socket vers un DNS public (8.8.8.8) pour déterminer l'interface active.
-2. Pourcentage CPU des processus
-Problème : Beaucoup de processus affichaient 0.0% de CPU.
-Solution : Ajout d'un intervalle de mesure avec cpu_percent(interval=0.1).
-3. Permissions sur certains fichiers
-Problème : Erreurs PermissionDenied lors de l'analyse de fichiers.
-Solution : Gestion des exceptions avec try/except pour ignorer les fichiers inaccessibles.
-4. Conversion des unités de mémoire
-Problème : Affichage de la RAM en octets (illisible).
-Solution : Conversion en GB avec total / (1024**3) et arrondi à 2 décimales.
+| Couche | Role | Module |
+|--------|------|--------|
+| **Data** | Collecte des donnees via psutil | `system_collector.py` |
+| **Core** | Traitement et formatage des donnees | `data_processor.py` |
+| **API** | Substitution des variables dans le template | `html_generator.py` |
 
-🚀 Améliorations Possibles
-Court terme
-    • [ ] Ajouter un rafraîchissement automatique toutes les 30 secondes
-    • [ ] Implémenter un code couleur (vert/orange/rouge) selon les seuils d'utilisation
-    • [ ] Ajouter des graphiques avec Chart.js ou Plotly
-    • [ ] Afficher l'utilisation par cœur CPU
-Moyen terme
-    • [ ] Analyse récursive des sous-dossiers
-    • [ ] Support de plus d'extensions de fichiers (10+)
-    • [ ] Calcul de l'espace disque par type de fichier
-    • [ ] Historique des mesures sur 24h
-Long terme
-    • [ ] Mode serveur avec Flask pour accès distant
-    • [ ] Authentification utilisateur
-    • [ ] Base de données pour stocker l'historique
-    • [ ] Alertes email/SMS en cas de dépassement de seuils
-    • [ ] Dashboard responsive avec graphiques interactifs
-👥 Auteurs
-    • Farouk - Administration & Python
-    • Claude - Python & HTML
-    • Lamali - Design & CSS
-📝 Licence
-Projet académique réalisé dans le cadre du Challenge Triple A.
-🙏 Remerciements
-    • L'équipe pédagogique pour le sujet du Challenge
-    • La documentation de psutil
-    • La communauté Ubuntu
+## Indicateurs Colores
+
+Les gauges utilisent un code couleur selon les seuils :
+
+| Couleur | Plage | Signification |
+|---------|-------|---------------|
+| Vert | 0-50% | Normal |
+| Orange | 51-80% | Attention |
+| Rouge | 81-100% | Critique |
+
+## Captures d'ecran
+
+*A ajouter dans le dossier `screenshots/`*
+
+- `terminal.png` : Execution du script dans le terminal
+- `index.png` : Dashboard dans le navigateur
+
+## Difficultes Rencontrees
+
+- Configuration de l'environnement virtuel Python sur Ubuntu
+- Gestion des permissions pour acceder aux informations systeme
+- Analyse recursive des fichiers avec gestion des erreurs d'acces
+
+## Ameliorations Possibles
+
+- Historique des metriques avec graphiques
+- Alertes par email en cas de seuils depasses
+- Interface d'administration pour configurer les parametres
+- Support multi-machines avec aggregation des donnees
+- Export des donnees en JSON/CSV
+
+## Technologies
+
+- **Python 3** : Langage principal
+- **psutil** : Bibliotheque de collecte systeme
+- **HTML5** : Structure semantique
+- **CSS3** : Styles avec Flexbox/Grid, gauges animees
+
+## Licence
+
+Projet educatif - Libre d'utilisation -->

@@ -1,0 +1,7 @@
+# Python dependencies for the Triple A project
+
+# === Production ===
+psutil>=5.9.0              # Collecte des données système (CPU, RAM, disque, réseau)
+
+# === Tests ===
+pytest>=7.0.0              # Framework de tests
