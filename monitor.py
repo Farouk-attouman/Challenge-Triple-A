@@ -18,12 +18,12 @@ from pathlib import Path
 # Ajout du chemin src pour les imports
 sys.path.insert(0, str(Path(__file__).parent))
 
-from src.data.system_collector import SystemCollector
-from src.core.data_processor import DataProcessor
-from src.api.html_generator import HTMLGenerator
+from src.data.system_collector import collect_all
+from src.core.data_processor import get_template_variables
+from src.api.html_generator import generate_file
 
 
-def parse_arguments() -> argparse.Namespace:
+def parse_arguments():
     """Parse les arguments de la ligne de commande."""
     parser = argparse.ArgumentParser(
         description="Monitoring système avec génération de dashboard HTML",
@@ -67,7 +67,7 @@ Exemples:
     return parser.parse_args()
 
 
-def main() -> int:
+def main():
     """
     Fonction principale du script de monitoring.
 
@@ -84,8 +84,7 @@ def main() -> int:
     # Étape 1: Collecte des données (Data Layer)
     print("[1/3] Collecte des données système...")
     try:
-        collector = SystemCollector(files_directory=args.directory)
-        raw_data = collector.collect_all()
+        raw_data = collect_all(files_directory=args.directory)
 
         if args.verbose:
             print(f"      - Hostname: {raw_data['system']['hostname']}")
@@ -104,8 +103,7 @@ def main() -> int:
     # Étape 2: Traitement des données (Core Layer)
     print("[2/3] Traitement des données...")
     try:
-        processor = DataProcessor(raw_data)
-        template_vars = processor.get_template_variables()
+        template_vars = get_template_variables(raw_data)
         print(f"      {len(template_vars)} variables générées")
     except Exception as e:
         print(f"      ERREUR: {e}")
@@ -122,10 +120,9 @@ def main() -> int:
             print(f"      ERREUR: Template non trouvé: {template_path}")
             return 1
 
-        generator = HTMLGenerator(str(template_path))
         output_path = script_dir / args.output
 
-        if generator.generate_file(template_vars, str(output_path)):
+        if generate_file(str(template_path), template_vars, str(output_path)):
             print(f"      Dashboard généré: {output_path}")
         else:
             print("      ERREUR: Échec de la génération")
