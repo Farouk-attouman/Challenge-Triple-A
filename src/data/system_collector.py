@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """
-Data Layer - Collecte des données système via psutil.
-Ce module récupère les informations brutes du système Linux.
+Data Layer - System data collection via psutil.
+This module retrieves raw system information from the Linux system.
 """
 
 import os
@@ -14,7 +14,7 @@ import psutil
 
 
 def format_bytes(bytes_value):
-    """Formate les bytes en unité lisible."""
+    """Format bytes into human-readable units."""
     for unit in ["B", "KB", "MB", "GB", "TB"]:
         if bytes_value < 1024:
             return f"{bytes_value:.2f} {unit}"
@@ -23,14 +23,14 @@ def format_bytes(bytes_value):
 
 
 def format_uptime(seconds):
-    """Formate le temps de fonctionnement."""
+    """Format uptime duration."""
     days = int(seconds // 86400)
     hours = int((seconds % 86400) // 3600)
     minutes = int((seconds % 3600) // 60)
 
     parts = []
     if days > 0:
-        parts.append(f"{days}j")
+        parts.append(f"{days}d")
     if hours > 0:
         parts.append(f"{hours}h")
     parts.append(f"{minutes}m")
@@ -39,7 +39,7 @@ def format_uptime(seconds):
 
 
 def get_cpu_freq():
-    """Récupère la fréquence CPU."""
+    """Get CPU frequency."""
     try:
         freq = psutil.cpu_freq()
         if freq:
@@ -54,7 +54,7 @@ def get_cpu_freq():
 
 
 def get_system_info():
-    """Récupère les informations générales du système."""
+    """Get general system information."""
     boot_time = datetime.fromtimestamp(psutil.boot_time())
     uptime = datetime.now() - boot_time
 
@@ -71,7 +71,7 @@ def get_system_info():
 
 
 def get_cpu_info():
-    """Récupère les informations CPU."""
+    """Get CPU information."""
     cpu_percent_per_core = psutil.cpu_percent(interval=1, percpu=True)
     load_avg = psutil.getloadavg() if hasattr(psutil, "getloadavg") else (0, 0, 0)
 
@@ -88,7 +88,7 @@ def get_cpu_info():
 
 
 def get_memory_info():
-    """Récupère les informations mémoire."""
+    """Get memory information."""
     mem = psutil.virtual_memory()
     swap = psutil.swap_memory()
 
@@ -109,7 +109,7 @@ def get_memory_info():
 
 
 def get_disk_info():
-    """Récupère les informations disque."""
+    """Get disk information."""
     disk = psutil.disk_usage("/")
 
     return {
@@ -124,7 +124,7 @@ def get_disk_info():
 
 
 def get_network_info():
-    """Récupère les informations réseau."""
+    """Get network information."""
     net_io = psutil.net_io_counters()
 
     interfaces = {}
@@ -147,7 +147,7 @@ def get_network_info():
 
 
 def get_processes_info():
-    """Récupère les informations sur les processus."""
+    """Get process information."""
     processes = []
 
     for proc in psutil.process_iter(["pid", "name", "cpu_percent", "memory_percent"]):
@@ -162,11 +162,11 @@ def get_processes_info():
         except (psutil.NoSuchProcess, psutil.AccessDenied):
             continue
 
-    # Tri par CPU puis par mémoire
+    # Sort by CPU then by memory
     processes.sort(key=lambda x: (x["cpu_percent"], x["memory_percent"]), reverse=True)
     top_3_cpu = processes[:3]
 
-    # Tri par mémoire
+    # Sort by memory
     processes.sort(key=lambda x: x["memory_percent"], reverse=True)
     top_3_memory = processes[:3]
 
@@ -179,11 +179,11 @@ def get_processes_info():
 
 def get_files_info(files_directory="/home", recursive=True):
     """
-    Analyse les fichiers dans le répertoire spécifié.
+    Analyze files in the specified directory.
 
     Args:
-        files_directory: Répertoire à analyser pour les fichiers.
-        recursive: Si True, analyse récursivement les sous-dossiers.
+        files_directory: Directory to analyze for files.
+        recursive: If True, recursively analyze subdirectories.
     """
     extensions = {
         ".txt": {"count": 0, "size": 0},
@@ -231,11 +231,11 @@ def get_files_info(files_directory="/home", recursive=True):
     except (PermissionError, OSError):
         pass
 
-    # Top 5 fichiers les plus volumineux
+    # Top 5 largest files
     largest_files.sort(key=lambda x: x["size"], reverse=True)
     top_5_largest = largest_files[:5]
 
-    # Calcul des pourcentages
+    # Calculate percentages
     file_stats = {}
     for ext, data in extensions.items():
         if data["count"] > 0:
@@ -257,10 +257,10 @@ def get_files_info(files_directory="/home", recursive=True):
 
 def collect_all(files_directory="/home"):
     """
-    Collecte toutes les données système.
+    Collect all system data.
 
     Args:
-        files_directory: Répertoire à analyser pour les fichiers.
+        files_directory: Directory to analyze for files.
     """
     return {
         "timestamp": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
@@ -275,7 +275,7 @@ def collect_all(files_directory="/home"):
 
 
 if __name__ == "__main__":
-    # Test du module
+    # Module test
     data = collect_all(files_directory="/home")
 
     import json

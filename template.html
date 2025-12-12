@@ -1,23 +1,23 @@
 <!DOCTYPE html>
-<html lang="fr">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="refresh" content="30">
-    <title>Dashboard Monitoring - {{system_hostname}}</title>
+    <title>Monitoring Dashboard - {{system_hostname}}</title>
     <link rel="stylesheet" href="template.css">
 </head>
 <body>
     <header role="banner">
-        <h1>Dashboard Monitoring</h1>
+        <h1>Monitoring Dashboard</h1>
         <p class="subtitle">Machine: <strong>{{system_hostname}}</strong></p>
-        <p class="timestamp">Derniere mise a jour: {{timestamp}}</p>
+        <p class="timestamp">Last updated: {{timestamp}}</p>
     </header>
 
     <main role="main">
-        <!-- Section Systeme -->
+        <!-- System Section -->
         <section class="card" aria-labelledby="system-title">
-            <h2 id="system-title">Systeme</h2>
+            <h2 id="system-title">System</h2>
             <div class="info-grid">
                 <div class="info-item">
                     <span class="label">Hostname</span>
@@ -32,7 +32,7 @@
                     <span class="value">{{system_architecture}}</span>
                 </div>
                 <div class="info-item">
-                    <span class="label">Demarrage</span>
+                    <span class="label">Boot Time</span>
                     <span class="value">{{system_boot_time}}</span>
                 </div>
                 <div class="info-item">
@@ -46,7 +46,7 @@
             </div>
         </section>
 
-        <!-- Section CPU -->
+        <!-- CPU Section -->
         <section class="card" aria-labelledby="cpu-title">
             <h2 id="cpu-title">CPU</h2>
             <div class="gauge-container">
@@ -57,15 +57,15 @@
             </div>
             <div class="info-grid">
                 <div class="info-item">
-                    <span class="label">Coeurs physiques</span>
+                    <span class="label">Physical Cores</span>
                     <span class="value">{{cpu_physical_cores}}</span>
                 </div>
                 <div class="info-item">
-                    <span class="label">Coeurs logiques</span>
+                    <span class="label">Logical Cores</span>
                     <span class="value">{{cpu_logical_cores}}</span>
                 </div>
                 <div class="info-item">
-                    <span class="label">Frequence</span>
+                    <span class="label">Frequency</span>
                     <span class="value">{{cpu_freq_current}} MHz</span>
                 </div>
                 <div class="info-item">
@@ -73,15 +73,15 @@
                     <span class="value">{{cpu_load_1min}} | {{cpu_load_5min}} | {{cpu_load_15min}}</span>
                 </div>
             </div>
-            <h3>Utilisation par coeur</h3>
+            <h3>Usage per Core</h3>
             <div class="cores-grid">
                 {{cpu_cores_html}}
             </div>
         </section>
 
-        <!-- Section Memoire -->
+        <!-- Memory Section -->
         <section class="card" aria-labelledby="memory-title">
-            <h2 id="memory-title">Memoire</h2>
+            <h2 id="memory-title">Memory</h2>
             <h3>RAM</h3>
             <div class="gauge-container">
                 <div class="gauge">
@@ -95,11 +95,11 @@
                     <span class="value">{{memory_total}}</span>
                 </div>
                 <div class="info-item">
-                    <span class="label">Utilise</span>
+                    <span class="label">Used</span>
                     <span class="value">{{memory_used}}</span>
                 </div>
                 <div class="info-item">
-                    <span class="label">Disponible</span>
+                    <span class="label">Available</span>
                     <span class="value">{{memory_available}}</span>
                 </div>
             </div>
@@ -116,15 +116,15 @@
                     <span class="value">{{swap_total}}</span>
                 </div>
                 <div class="info-item">
-                    <span class="label">Utilise</span>
+                    <span class="label">Used</span>
                     <span class="value">{{swap_used}}</span>
                 </div>
             </div>
         </section>
 
-        <!-- Section Disque -->
+        <!-- Disk Section -->
         <section class="card" aria-labelledby="disk-title">
-            <h2 id="disk-title">Disque</h2>
+            <h2 id="disk-title">Disk</h2>
             <div class="gauge-container">
                 <div class="gauge">
                     <div class="gauge-fill {{disk_color_class}}" style="width: {{disk_percent_int}}%;" role="progressbar" aria-valuenow="{{disk_percent_int}}" aria-valuemin="0" aria-valuemax="100"></div>
@@ -137,34 +137,34 @@
                     <span class="value">{{disk_total}}</span>
                 </div>
                 <div class="info-item">
-                    <span class="label">Utilise</span>
+                    <span class="label">Used</span>
                     <span class="value">{{disk_used}}</span>
                 </div>
                 <div class="info-item">
-                    <span class="label">Libre</span>
+                    <span class="label">Free</span>
                     <span class="value">{{disk_free}}</span>
                 </div>
             </div>
         </section>
 
-        <!-- Section Reseau -->
+        <!-- Network Section -->
         <section class="card" aria-labelledby="network-title">
-            <h2 id="network-title">Reseau</h2>
+            <h2 id="network-title">Network</h2>
             <div class="info-grid">
                 <div class="info-item">
-                    <span class="label">Donnees envoyees</span>
+                    <span class="label">Data Sent</span>
                     <span class="value">{{network_bytes_sent}}</span>
                 </div>
                 <div class="info-item">
-                    <span class="label">Donnees recues</span>
+                    <span class="label">Data Received</span>
                     <span class="value">{{network_bytes_recv}}</span>
                 </div>
                 <div class="info-item">
-                    <span class="label">Paquets envoyes</span>
+                    <span class="label">Packets Sent</span>
                     <span class="value">{{network_packets_sent}}</span>
                 </div>
                 <div class="info-item">
-                    <span class="label">Paquets recus</span>
+                    <span class="label">Packets Received</span>
                     <span class="value">{{network_packets_recv}}</span>
                 </div>
             </div>
@@ -174,19 +174,19 @@
             </ul>
         </section>
 
-        <!-- Section Processus -->
+        <!-- Processes Section -->
         <section class="card" aria-labelledby="processes-title">
-            <h2 id="processes-title">Processus</h2>
-            <p class="total-count">Total: <strong>{{processes_total}}</strong> processus actifs</p>
+            <h2 id="processes-title">Processes</h2>
+            <p class="total-count">Total: <strong>{{processes_total}}</strong> active processes</p>
 
-            <h3>Top 3 - Consommation CPU</h3>
-            <table class="process-table" role="table" aria-label="Processus par CPU">
+            <h3>Top 3 - CPU Usage</h3>
+            <table class="process-table" role="table" aria-label="Processes by CPU">
                 <thead>
                     <tr>
                         <th scope="col">PID</th>
-                        <th scope="col">Nom</th>
+                        <th scope="col">Name</th>
                         <th scope="col">CPU</th>
-                        <th scope="col">Memoire</th>
+                        <th scope="col">Memory</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -194,14 +194,14 @@
                 </tbody>
             </table>
 
-            <h3>Top 3 - Consommation Memoire</h3>
-            <table class="process-table" role="table" aria-label="Processus par memoire">
+            <h3>Top 3 - Memory Usage</h3>
+            <table class="process-table" role="table" aria-label="Processes by memory">
                 <thead>
                     <tr>
                         <th scope="col">PID</th>
-                        <th scope="col">Nom</th>
+                        <th scope="col">Name</th>
                         <th scope="col">CPU</th>
-                        <th scope="col">Memoire</th>
+                        <th scope="col">Memory</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -210,20 +210,20 @@
             </table>
         </section>
 
-        <!-- Section Fichiers -->
+        <!-- Files Section -->
         <section class="card" aria-labelledby="files-title">
-            <h2 id="files-title">Fichiers</h2>
-            <p class="directory-info">Repertoire analyse: <code>{{files_directory}}</code></p>
-            <p class="total-count">Total: <strong>{{files_total}}</strong> fichiers</p>
+            <h2 id="files-title">Files</h2>
+            <p class="directory-info">Analyzed directory: <code>{{files_directory}}</code></p>
+            <p class="total-count">Total: <strong>{{files_total}}</strong> files</p>
 
-            <h3>Repartition par extension</h3>
-            <table class="files-table" role="table" aria-label="Fichiers par extension">
+            <h3>Distribution by Extension</h3>
+            <table class="files-table" role="table" aria-label="Files by extension">
                 <thead>
                     <tr>
                         <th scope="col">Extension</th>
-                        <th scope="col">Nombre</th>
-                        <th scope="col">Taille</th>
-                        <th scope="col">Pourcentage</th>
+                        <th scope="col">Count</th>
+                        <th scope="col">Size</th>
+                        <th scope="col">Percentage</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -231,12 +231,12 @@
                 </tbody>
             </table>
 
-            <h3>Fichiers les plus volumineux</h3>
-            <table class="files-table" role="table" aria-label="Plus gros fichiers">
+            <h3>Largest Files</h3>
+            <table class="files-table" role="table" aria-label="Largest files">
                 <thead>
                     <tr>
-                        <th scope="col">Nom</th>
-                        <th scope="col">Taille</th>
+                        <th scope="col">Name</th>
+                        <th scope="col">Size</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -247,8 +247,8 @@
     </main>
 
     <footer role="contentinfo">
-        <p>Dashboard Monitoring - Projet AAA</p>
-        <p>Actualisation automatique toutes les 30 secondes</p>
+        <p>Monitoring Dashboard - AAA Project</p>
+        <p>Auto-refresh every 30 seconds</p>
     </footer>
 </body>
 </html>

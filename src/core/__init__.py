@@ -1,4 +1,4 @@
-# Core Layer - Logique métier et traitement des données
+# Core Layer - Business logic and data processing
 from .data_processor import (
     get_template_variables,
     process_all,

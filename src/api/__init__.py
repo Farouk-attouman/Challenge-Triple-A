@@ -1,4 +1,4 @@
-# API Layer - Génération HTML à partir des templates
+# API Layer - HTML generation from templates
 from .html_generator import (
     generate_file,
     load_template,

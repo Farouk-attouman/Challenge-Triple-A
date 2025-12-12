@@ -1,21 +1,21 @@
 #!/usr/bin/env python3
 """
-Monitor.py - Script principal de monitoring système.
+Monitor.py - Main system monitoring script.
 
-Ce script collecte les informations système d'une VM Linux
-et génère un dashboard HTML statique.
+This script collects system information from a Linux VM
+and generates a static HTML dashboard.
 
 Usage:
-    python monitor.py [--directory /chemin] [--output index.html]
+    python monitor.py [--directory /path] [--output index.html]
 
-Auteur: Projet AAA
+Author: AAA Project
 """
 
 import argparse
 import sys
 from pathlib import Path
 
-# Ajout du chemin src pour les imports
+# Add src path for imports
 sys.path.insert(0, str(Path(__file__).parent))
 
 from src.data.system_collector import collect_all
@@ -24,16 +24,16 @@ from src.api.html_generator import generate_file
 
 
 def parse_arguments():
-    """Parse les arguments de la ligne de commande."""
+    """Parse command line arguments."""
     parser = argparse.ArgumentParser(
-        description="Monitoring système avec génération de dashboard HTML",
+        description="System monitoring with HTML dashboard generation",
         formatter_class=argparse.RawDescriptionHelpFormatter,
         epilog="""
-Exemples:
+Examples:
     python monitor.py
     python monitor.py --directory /home/user/Documents
     python monitor.py --output dashboard.html
-    python monitor.py -d /var/log -o rapport.html
+    python monitor.py -d /var/log -o report.html
         """
     )
 
@@ -41,27 +41,27 @@ Exemples:
         "-d", "--directory",
         type=str,
         default="/home",
-        help="Répertoire à analyser pour les fichiers (défaut: /home)"
+        help="Directory to analyze for files (default: /home)"
     )
 
     parser.add_argument(
         "-o", "--output",
         type=str,
         default="index.html",
-        help="Fichier HTML de sortie (défaut: index.html)"
+        help="Output HTML file (default: index.html)"
     )
 
     parser.add_argument(
         "-t", "--template",
         type=str,
         default="template.html",
-        help="Fichier template HTML (défaut: template.html)"
+        help="HTML template file (default: template.html)"
     )
 
     parser.add_argument(
         "-v", "--verbose",
         action="store_true",
-        help="Mode verbeux avec affichage des détails"
+        help="Verbose mode with detailed output"
     )
 
     return parser.parse_args()
@@ -69,20 +69,20 @@ Exemples:
 
 def main():
     """
-    Fonction principale du script de monitoring.
+    Main function of the monitoring script.
 
     Returns:
-        Code de retour (0 = succès, 1 = erreur).
+        Return code (0 = success, 1 = error).
     """
     args = parse_arguments()
 
     print("=" * 50)
-    print("  DASHBOARD MONITORING - Projet AAA")
+    print("  MONITORING DASHBOARD - AAA Project")
     print("=" * 50)
     print()
 
-    # Étape 1: Collecte des données (Data Layer)
-    print("[1/3] Collecte des données système...")
+    # Step 1: Data collection (Data Layer)
+    print("[1/3] Collecting system data...")
     try:
         raw_data = collect_all(files_directory=args.directory)
 
@@ -91,56 +91,56 @@ def main():
             print(f"      - OS: {raw_data['system']['os']} {raw_data['system']['os_version']}")
             print(f"      - CPU: {raw_data['cpu']['cpu_percent']}%")
             print(f"      - RAM: {raw_data['memory']['percent']}%")
-            print(f"      - Disque: {raw_data['disk']['percent']}%")
-            print(f"      - Processus: {raw_data['processes']['total_count']}")
-            print(f"      - Fichiers analysés: {raw_data['files']['total_files']}")
+            print(f"      - Disk: {raw_data['disk']['percent']}%")
+            print(f"      - Processes: {raw_data['processes']['total_count']}")
+            print(f"      - Files analyzed: {raw_data['files']['total_files']}")
 
-        print("      Collecte terminée avec succès!")
+        print("      Collection completed successfully!")
     except Exception as e:
-        print(f"      ERREUR: {e}")
+        print(f"      ERROR: {e}")
         return 1
 
-    # Étape 2: Traitement des données (Core Layer)
-    print("[2/3] Traitement des données...")
+    # Step 2: Data processing (Core Layer)
+    print("[2/3] Processing data...")
     try:
         template_vars = get_template_variables(raw_data)
-        print(f"      {len(template_vars)} variables générées")
+        print(f"      {len(template_vars)} variables generated")
     except Exception as e:
-        print(f"      ERREUR: {e}")
+        print(f"      ERROR: {e}")
         return 1
 
-    # Étape 3: Génération HTML (API Layer)
-    print("[3/3] Génération du dashboard HTML...")
+    # Step 3: HTML generation (API Layer)
+    print("[3/3] Generating HTML dashboard...")
     try:
-        # Déterminer le chemin du template
+        # Determine template path
         script_dir = Path(__file__).parent
         template_path = script_dir / args.template
 
         if not template_path.exists():
-            print(f"      ERREUR: Template non trouvé: {template_path}")
+            print(f"      ERROR: Template not found: {template_path}")
             return 1
 
         output_path = script_dir / args.output
 
         if generate_file(str(template_path), template_vars, str(output_path)):
-            print(f"      Dashboard généré: {output_path}")
+            print(f"      Dashboard generated: {output_path}")
         else:
-            print("      ERREUR: Échec de la génération")
+            print("      ERROR: Generation failed")
             return 1
     except Exception as e:
-        print(f"      ERREUR: {e}")
+        print(f"      ERROR: {e}")
         return 1
 
     print()
     print("=" * 50)
-    print("  MONITORING TERMINÉ AVEC SUCCÈS")
+    print("  MONITORING COMPLETED SUCCESSFULLY")
     print("=" * 50)
     print()
-    print(f"Dashboard disponible: {output_path}")
-    print(f"Ouvrez ce fichier dans un navigateur web.")
+    print(f"Dashboard available: {output_path}")
+    print(f"Open this file in a web browser.")
     print()
-    print("Le dashboard se rafraîchit automatiquement toutes les 30 secondes.")
-    print("Pour mettre à jour les données, relancez ce script.")
+    print("The dashboard auto-refreshes every 30 seconds.")
+    print("To update data, run this script again.")
     print()
 
     return 0

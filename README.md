@@ -1,51 +1,62 @@
-# Projet AAA - Dashboard Monitoring Linux
+# AAA Project - Linux Monitoring Dashboard
 
 [![Python](https://img.shields.io/badge/Python-3.8+-blue.svg)](https://www.python.org/)
 
-Dashboard de monitoring en temps réel pour machine virtuelle Ubuntu.
+Real-time monitoring dashboard for Ubuntu virtual machine.
+
+## Screenshots
+
+### Dashboard Overview
+![Dashboard Overview](screenshots/dashboard1.png)
+
+### Detailed Metrics
+![Detailed Metrics](screenshots/dashboard2.png)
+
+### Terminal Output
+![Terminal Output](screenshots/terminal.png)
 
 ## Description
 
-Ce projet permet de surveiller les ressources système d'une VM Linux et d'afficher les informations dans un dashboard web statique qui se rafraîchit automatiquement.
+This project monitors system resources of a Linux VM and displays information in a static web dashboard that automatically refreshes.
 
-### Fonctionnalités
+### Features
 
-- **Système** : Hostname, OS, architecture, uptime
-- **CPU** : Utilisation globale et par cœur, load average
-- **Mémoire** : RAM et Swap (utilisation, disponible)
-- **Disque** : Espace utilisé/libre
-- **Réseau** : Données envoyées/reçues, interfaces
-- **Processus** : Top 3 CPU et mémoire
-- **Fichiers** : Analyse par extension, plus gros fichiers
+- **System**: Hostname, OS, architecture, uptime
+- **CPU**: Global and per-core usage, load average
+- **Memory**: RAM and Swap (usage, available)
+- **Disk**: Used/free space
+- **Network**: Sent/received data, interfaces
+- **Processes**: Top 3 by CPU and memory
+- **Files**: Analysis by extension, largest files
 
-## Prérequis
+## Prerequisites
 
-- Ubuntu Desktop 22.04 LTS (ou autre distribution Linux)
+- Ubuntu Desktop 22.04 LTS (or other Linux distribution)
 - Python 3.8+
 - pip3
 
 ## Installation
 
 ```bash
-# 1. Cloner le projet
-git clone <url-du-repo>
+# 1. Clone the project
+git clone <repo-url>
 cd Challenge-Triple-A
 
-# 2. Créer l'environnement virtuel
+# 2. Create virtual environment
 python3 -m venv venv
 source venv/bin/activate
 
-# 3. Installer les dépendances
+# 3. Install dependencies
 pip install -r requirements.txt
 ```
 
-## Utilisation
+## Usage
 
 ```bash
-# Lancer le monitoring (génère index.html)
+# Run monitoring (generates index.html)
 python monitor.py
 
-# Options disponibles
+# Available options
 python monitor.py --help
 python monitor.py --directory /home/user/Documents
 python monitor.py --output dashboard.html
@@ -53,66 +64,70 @@ python monitor.py --template custom_template.html
 python monitor.py --verbose
 ```
 
-Ouvrir `index.html` dans un navigateur web. La page se rafraîchit automatiquement toutes les 30 secondes.
+Open `index.html` in a web browser. The page automatically refreshes every 30 seconds.
 
 ## Architecture
 
-Le projet suit une architecture en couches pour la modularité :
+The project follows a layered architecture for modularity:
 
 ```
 Challenge-Triple-A/
 ├── src/
 │   ├── __init__.py
-│   ├── api/                 # Couche API (génération HTML)
+│   ├── api/                 # API Layer (HTML generation)
 │   │   ├── __init__.py
 │   │   └── html_generator.py
-│   ├── core/                # Couche Core (logique métier)
+│   ├── core/                # Core Layer (business logic)
 │   │   ├── __init__.py
 │   │   └── data_processor.py
-│   └── data/                # Couche Data (accès système)
+│   └── data/                # Data Layer (system access)
 │       ├── __init__.py
 │       └── system_collector.py
 ├── tests/
 │   ├── __init__.py
 │   └── test_main.py
-├── monitor.py               # Script principal
-├── template.html            # Template HTML avec variables
-├── template.css             # Styles CSS avec gauges
-├── index.html               # Dashboard généré (gitignore)
-├── requirements.txt         # Dépendances Python
+├── screenshots/             # Dashboard screenshots
+│   ├── dashboard1.png
+│   ├── dashboard2.png
+│   └── terminal.png
+├── monitor.py               # Main script
+├── template.html            # HTML template with variables
+├── template.css             # CSS styles with gauges
+├── index.html               # Generated dashboard (gitignore)
+├── requirements.txt         # Python dependencies
 ├── .gitignore
 └── README.md
 ```
 
-### Couches
+### Layers
 
-| Couche | Rôle | Module |
-|--------|------|--------|
-| **Data** | Collecte des données via psutil | `system_collector.py` |
-| **Core** | Traitement et formatage des données | `data_processor.py` |
-| **API** | Substitution des variables dans le template | `html_generator.py` |
+| Layer | Role | Module |
+|-------|------|--------|
+| **Data** | Data collection via psutil | `system_collector.py` |
+| **Core** | Data processing and formatting | `data_processor.py` |
+| **API** | Variable substitution in template | `html_generator.py` |
 
-## Indicateurs Colorés
+## Color Indicators
 
-Les gauges utilisent un code couleur selon les seuils :
+Gauges use a color code based on thresholds:
 
-| Couleur | Plage | Signification |
-|---------|-------|---------------|
-| 🟢 Vert | 0-50% | Normal |
-| 🟠 Orange | 51-80% | Attention |
-| 🔴 Rouge | 81-100% | Critique |
+| Color | Range | Meaning |
+|-------|-------|---------|
+| Green | 0-50% | Normal |
+| Orange | 51-80% | Warning |
+| Red | 81-100% | Critical |
 
 ## Technologies
 
-- **Python 3** : Langage principal
-- **psutil** : Bibliothèque de collecte système
-- **HTML5** : Structure sémantique
-- **CSS3** : Styles avec Flexbox/Grid, gauges animées
+- **Python 3**: Main language
+- **psutil**: System data collection library
+- **HTML5**: Semantic structure
+- **CSS3**: Styles with Flexbox/Grid, animated gauges
 
-## Contribuer
+## Contributing
 
-Les contributions sont les bienvenues ! N'hésitez pas à ouvrir une issue ou une pull request.
+Contributions are welcome! Feel free to open an issue or pull request.
 
-## Licence
+## License
 
-Projet éducatif - Libre d'utilisation
+Educational project - Free to use

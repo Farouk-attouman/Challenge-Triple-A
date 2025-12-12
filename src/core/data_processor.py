@@ -1,10 +1,10 @@
 #!/usr/bin/env python3
 """
-Core Layer - Logique métier et traitement des données.
-Ce module transforme les données brutes en format utilisable pour l'affichage.
+Core Layer - Business logic and data processing.
+This module transforms raw data into a usable format for display.
 """
 
-# Seuils pour les indicateurs colorés
+# Thresholds for color indicators
 THRESHOLDS = {
     "green": 50,    # 0-50%
     "orange": 80,   # 51-80%
@@ -14,13 +14,13 @@ THRESHOLDS = {
 
 def get_color_class(percentage):
     """
-    Détermine la classe CSS de couleur selon le pourcentage.
+    Determine the CSS color class based on percentage.
 
     Args:
-        percentage: Valeur en pourcentage (0-100).
+        percentage: Value as percentage (0-100).
 
     Returns:
-        Nom de la classe CSS (gauge-green, gauge-orange, gauge-red).
+        CSS class name (gauge-green, gauge-orange, gauge-red).
     """
     if percentage <= THRESHOLDS["green"]:
         return "gauge-green"
@@ -31,7 +31,7 @@ def get_color_class(percentage):
 
 
 def process_system(raw_data):
-    """Traite les données système."""
+    """Process system data."""
     system = raw_data.get("system", {})
     return {
         "hostname": system.get("hostname", "N/A"),
@@ -45,11 +45,11 @@ def process_system(raw_data):
 
 
 def process_cpu(raw_data):
-    """Traite les données CPU."""
+    """Process CPU data."""
     cpu = raw_data.get("cpu", {})
     percent = cpu.get("cpu_percent", 0)
 
-    # Traitement des cores
+    # Process cores
     cores_data = []
     for i, core_percent in enumerate(cpu.get("cpu_percent_per_core", [])):
         cores_data.append({
@@ -74,7 +74,7 @@ def process_cpu(raw_data):
 
 
 def process_memory(raw_data):
-    """Traite les données mémoire."""
+    """Process memory data."""
     mem = raw_data.get("memory", {})
     percent = mem.get("percent", 0)
     swap_percent = mem.get("swap_percent", 0)
@@ -95,7 +95,7 @@ def process_memory(raw_data):
 
 
 def process_disk(raw_data):
-    """Traite les données disque."""
+    """Process disk data."""
     disk = raw_data.get("disk", {})
     percent = disk.get("percent", 0)
 
@@ -110,10 +110,10 @@ def process_disk(raw_data):
 
 
 def process_network(raw_data):
-    """Traite les données réseau."""
+    """Process network data."""
     net = raw_data.get("network", {})
 
-    # Liste des interfaces
+    # List of interfaces
     interfaces_list = []
     for iface, ip in net.get("interfaces", {}).items():
         interfaces_list.append({"name": iface, "ip": ip})
@@ -128,7 +128,7 @@ def process_network(raw_data):
 
 
 def process_processes(raw_data):
-    """Traite les données des processus."""
+    """Process processes data."""
     procs = raw_data.get("processes", {})
 
     return {
@@ -139,10 +139,10 @@ def process_processes(raw_data):
 
 
 def process_files(raw_data):
-    """Traite les données des fichiers."""
+    """Process files data."""
     files = raw_data.get("files", {})
 
-    # Conversion en liste pour l'affichage
+    # Convert to list for display
     extensions_list = []
     for ext, data in files.get("by_extension", {}).items():
         extensions_list.append({
@@ -152,7 +152,7 @@ def process_files(raw_data):
             "percentage": data.get("percentage", 0),
         })
 
-    # Tri par nombre de fichiers
+    # Sort by file count
     extensions_list.sort(key=lambda x: x["count"], reverse=True)
 
     return {
@@ -165,13 +165,13 @@ def process_files(raw_data):
 
 def process_all(raw_data):
     """
-    Traite toutes les données pour l'affichage.
+    Process all data for display.
 
     Args:
-        raw_data: Données collectées par les fonctions de system_collector.
+        raw_data: Data collected by system_collector functions.
 
     Returns:
-        Dictionnaire avec toutes les données formatées.
+        Dictionary with all formatted data.
     """
     return {
         "timestamp": raw_data.get("timestamp", "N/A"),
@@ -187,20 +187,20 @@ def process_all(raw_data):
 
 def get_template_variables(raw_data):
     """
-    Génère un dictionnaire plat de variables pour le template HTML.
+    Generate a flat dictionary of variables for the HTML template.
 
     Args:
-        raw_data: Données collectées par les fonctions de system_collector.
+        raw_data: Data collected by system_collector functions.
 
     Returns:
-        Dictionnaire avec toutes les variables pour substitution.
+        Dictionary with all variables for substitution.
     """
     data = process_all(raw_data)
     variables = {
         # Timestamp
         "timestamp": data["timestamp"],
 
-        # Système
+        # System
         "system_hostname": data["system"]["hostname"],
         "system_os": data["system"]["os"],
         "system_os_version": data["system"]["os_version"],
@@ -221,7 +221,7 @@ def get_template_variables(raw_data):
         "cpu_freq_current": data["cpu"]["freq_current"],
         "cpu_freq_max": data["cpu"]["freq_max"],
 
-        # Mémoire
+        # Memory
         "memory_total": data["memory"]["total"],
         "memory_used": data["memory"]["used"],
         "memory_available": data["memory"]["available"],
@@ -234,7 +234,7 @@ def get_template_variables(raw_data):
         "swap_percent_int": data["memory"]["swap_percent_int"],
         "swap_color_class": data["memory"]["swap_color_class"],
 
-        # Disque
+        # Disk
         "disk_total": data["disk"]["total"],
         "disk_used": data["disk"]["used"],
         "disk_free": data["disk"]["free"],
@@ -242,21 +242,21 @@ def get_template_variables(raw_data):
         "disk_percent_int": data["disk"]["percent_int"],
         "disk_color_class": data["disk"]["color_class"],
 
-        # Réseau
+        # Network
         "network_bytes_sent": data["network"]["bytes_sent"],
         "network_bytes_recv": data["network"]["bytes_recv"],
         "network_packets_sent": data["network"]["packets_sent"],
         "network_packets_recv": data["network"]["packets_recv"],
 
-        # Processus
+        # Processes
         "processes_total": data["processes"]["total_count"],
 
-        # Fichiers
+        # Files
         "files_directory": data["files"]["directory"],
         "files_total": data["files"]["total_files"],
     }
 
-    # Génération du HTML pour les cores CPU
+    # Generate HTML for CPU cores
     cores_html = ""
     for core in data["cpu"]["cores"]:
         cores_html += f'''
@@ -269,13 +269,13 @@ def get_template_variables(raw_data):
         </div>'''
     variables["cpu_cores_html"] = cores_html
 
-    # Génération du HTML pour les interfaces réseau
+    # Generate HTML for network interfaces
     interfaces_html = ""
     for iface in data["network"]["interfaces"]:
         interfaces_html += f'<li><strong>{iface["name"]}:</strong> {iface["ip"]}</li>'
     variables["network_interfaces_html"] = interfaces_html
 
-    # Génération du HTML pour le top 3 CPU
+    # Generate HTML for top 3 CPU processes
     top_cpu_html = ""
     for proc in data["processes"]["top_3_cpu"]:
         top_cpu_html += f'''
@@ -287,7 +287,7 @@ def get_template_variables(raw_data):
         </tr>'''
     variables["processes_top_cpu_html"] = top_cpu_html
 
-    # Génération du HTML pour le top 3 mémoire
+    # Generate HTML for top 3 memory processes
     top_mem_html = ""
     for proc in data["processes"]["top_3_memory"]:
         top_mem_html += f'''
@@ -299,7 +299,7 @@ def get_template_variables(raw_data):
         </tr>'''
     variables["processes_top_memory_html"] = top_mem_html
 
-    # Génération du HTML pour les extensions de fichiers
+    # Generate HTML for file extensions
     extensions_html = ""
     for ext in data["files"]["by_extension"]:
         extensions_html += f'''
@@ -311,7 +311,7 @@ def get_template_variables(raw_data):
         </tr>'''
     variables["files_extensions_html"] = extensions_html
 
-    # Génération du HTML pour les fichiers les plus volumineux
+    # Generate HTML for largest files
     largest_html = ""
     for f in data["files"]["top_5_largest"]:
         largest_html += f'''
@@ -325,7 +325,7 @@ def get_template_variables(raw_data):
 
 
 if __name__ == "__main__":
-    # Test du module
+    # Module test
     from src.data.system_collector import collect_all
 
     raw_data = collect_all(files_directory="/home")

@@ -1,4 +1,4 @@
-# Data Layer - Accès aux données système via psutil
+# Data Layer - System data access via psutil
 from .system_collector import (
     collect_all,
     get_system_info,

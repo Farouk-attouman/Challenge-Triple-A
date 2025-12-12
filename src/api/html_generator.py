@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """
-API Layer - Génération HTML à partir des templates.
-Ce module gère la substitution des variables dans le template HTML.
+API Layer - HTML generation from templates.
+This module handles variable substitution in the HTML template.
 """
 
 import re
@@ -10,65 +10,66 @@ from pathlib import Path
 
 def load_template(template_path):
     """
-    Charge le template depuis le fichier.
+    Load the template from file.
 
     Args:
-        template_path: Chemin vers le fichier template HTML.
+        template_path: Path to the HTML template file.
 
     Returns:
-        Contenu du template ou chaîne vide en cas d'erreur.
+        Template content or empty string on error.
     """
     try:
         with open(template_path, "r", encoding="utf-8") as f:
             return f.read()
     except FileNotFoundError:
-        print(f"Erreur: Template non trouvé: {template_path}")
+        print(f"Error: Template not found: {template_path}")
         return ""
     except IOError as e:
-        print(f"Erreur de lecture du template: {e}")
+        print(f"Error reading template: {e}")
         return ""
 
 
 def render(template_content, variables):
     """
-    Génère le HTML en remplaçant les variables.
+    Generate HTML by replacing variables.
 
     Args:
-        template_content: Contenu du template HTML.
-        variables: Dictionnaire des variables à substituer.
+        template_content: HTML template content.
+        variables: Dictionary of variables to substitute.
 
     Returns:
-        Contenu HTML avec les variables substituées.
+        HTML content with substituted variables.
     """
+    # Return empty string if template is empty
     if not template_content:
         return ""
 
     html = template_content
 
-    # Remplacement des variables {{variable}}
+    # Replace {{variable}} patterns
     for key, value in variables.items():
         pattern = r"\{\{\s*" + re.escape(key) + r"\s*\}\}"
         html = re.sub(pattern, str(value), html)
 
-    # Avertissement pour les variables non remplacées
+    # Warning for unsubstituted variables
     remaining = re.findall(r"\{\{[^}]+\}\}", html)
     if remaining:
-        print(f"Attention: Variables non substituées: {remaining}")
+        print(f"Warning: Unsubstituted variables: {remaining}")
 
     return html
 
 
 def generate_file(template_path, variables, output_path):
     """
-    Génère le fichier HTML de sortie.
+    Generate the output HTML file.
 
     Args:
-        template_path: Chemin vers le fichier template HTML.
-        variables: Dictionnaire des variables à substituer.
-        output_path: Chemin du fichier HTML de sortie.
+        template_path: Path to the HTML template file.
+        variables: Dictionary of variables to substitute.
+        output_path: Path for the output HTML file.
 
     Returns:
-        True si la génération a réussi, False sinon.
+        True if generation succeeded, False otherwise.
     """
     template_content = load_template(template_path)
     if not template_content:
@@ -85,15 +86,15 @@ def generate_file(template_path, variables, output_path):
         with open(output, "w", encoding="utf-8") as f:
             f.write(html)
 
-        print(f"Dashboard généré: {output_path}")
+        print(f"Dashboard generated: {output_path}")
         return True
     except IOError as e:
-        print(f"Erreur d'écriture: {e}")
+        print(f"Write error: {e}")
         return False
 
 
 if __name__ == "__main__":
-    # Test du module
+    # Module test
     test_vars = {
         "timestamp": "2024-01-15 10:30:00",
         "system_hostname": "ubuntu-vm",
@@ -102,4 +103,4 @@ if __name__ == "__main__":
 
     template_content = load_template("template.html")
     html = render(template_content, test_vars)
-    print(html[:500] if html else "Erreur de génération")
+    print(html[:500] if html else "Generation error")
