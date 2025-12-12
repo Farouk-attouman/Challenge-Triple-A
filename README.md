@@ -31,7 +31,7 @@ This project monitors system resources of a Linux VM and displays information in
 
 ## Prerequisites
 
-- Ubuntu Desktop 22.04 LTS (or other Linux distribution)
+- Ubuntu Desktop 22.04 LTS (or newer)
 - Python 3.8+
 - pip3
 
